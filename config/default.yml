@@ -1,0 +1,4 @@
+pupOptions:
+  # executablePath: "I:/_JRH/project/.local-chromium/win64-609904/chrome-win/chrome.exe" 
+  # executablePath: "C:/Program Files (x86)/Google/Chrome/Application/chrome.exe" 
+  headless: false

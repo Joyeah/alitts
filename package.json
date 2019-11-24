@@ -1,0 +1,16 @@
+{
+  "name": "alitts",
+  "version": "1.0.0",
+  "description": "Get audio from aliyun tts.",
+  "main": "index.js",
+  "repository": "https://github.com/Joyeah/alitts.git",
+  "author": "Joysong <javar@126.com>",
+  "license": "MIT",
+  "dependencies": {
+    "bunyan": "^1.8.12",
+    "config": "^3.2.4",
+    "js-yaml": "^3.13.1",
+    "puppeteer": "^2.0.0",
+    "puppeteer-core": "^2.0.0"
+  }
+}
