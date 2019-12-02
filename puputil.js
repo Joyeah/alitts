@@ -67,11 +67,15 @@ async function drag(page, from, to) {
   console.log('drag end:', to);
   //滑动滑块
   await page.mouse.move(from.x, from.y);
+  await page.touchscreen.tap(from.x, from.y); // h5需要手动分发事件 模拟app的事件分发机制
   await page.mouse.down();
-  await page.mouse.move(to.x, to.y);
+  // await page.mouse.move(to.x, to.y);
+  await page.mouse.move(to.x, to.y, { steps: 25 });
+  await page.touchscreen.tap(to.x, to.y); //H5事件
   await page.mouse.up();
   await page.waitFor(800); //增加延时能等页面js响应
   console.log('mouse up')
+  console.log('navigator.webdriver:', await page.evaluate('navigator.webdriver'))
   return true;
 }
 

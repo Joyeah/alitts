@@ -1,4 +1,5 @@
 const puppeteer = require('puppeteer');
+// const devices = require('puppeteer/DeviceDescriptors');
 const fs = require('fs');
 const https = require('https');
 const util = require('./util');
@@ -19,12 +20,12 @@ async function run(textlist){
     let pupOptions = config.get('pupOptions') || {};
     let options = {
         defaultViewport: { width: 1920, height: 1024 },
-        slowMo: 300,
+        slowMo: 30,
         "args": [
-            // "--disable-gpu",
+            "--disable-gpu",
             "--disable-web-security",
             "--disable-xss-auditor", // 关闭 XSS Auditor
-            // "--no-sandbox",
+            "--no-sandbox",
             "--no-first-run",
             "--disable-setuid-sandbox",
             "--allow-running-insecure-content", //允许不安全内容
@@ -40,6 +41,11 @@ async function run(textlist){
     util.log.info(options);
     const browser = await puppeteer.launch(options);
     const page = await browser.newPage();
+    // const iPhone = devices['iPhone 6 Plus'];
+    // await page.emulate(iPhone);
+
+    console.log('userAgent:', await browser.userAgent());
+    await page.setUserAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.108 Safari/537.36');
     page.on('console', msg => {
         for (let i = 0; i < msg.args().length; ++i)
             console.log(`${i}: ${msg.args()[i]}`); // 打印到代码的控制台
@@ -85,6 +91,14 @@ async function tts(page, text){
     // await page.type('.nls-tts-demo-left', text);
     
     await page.waitFor(200);
+    //关键: 滑动验证码会检测nabigator.webdriver这个属性
+    let webd = await page.evaluate('navigator.webdriver');
+    if(webd){
+        await page.evaluate(async () => {
+            Object.defineProperty(navigator, 'webdriver ', { get: () => false })
+        })
+    }
+    
     await page.click('.nls-tts-demo-submit');
     await page.waitFor(1000);
     await slide(page)
